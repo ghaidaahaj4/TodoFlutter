@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/ui/todos.dart';
 import 'package:todo/ui/widgits/todoformwidget.dart';
+
+import '../Todo.dart';
 
 class AddToDoDialogWidgit extends StatefulWidget {
   const AddToDoDialogWidgit({Key? key}) : super(key: key);
@@ -14,20 +18,40 @@ class _AddToDoDialogWidgitState extends State<AddToDoDialogWidgit> {
   String title='';
   String description="";
   Widget build(BuildContext context) => AlertDialog(
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
+    content:Form(
+      key: _formKey,
+      child:  Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
             'add to do',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,),
-        ),
-        const SizedBox(height: 8,),
-        TodoFormWidget(
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,),
+          ),
+          const SizedBox(height: 8,),
+          TodoFormWidget(
             onChangedDescription: (descreption)=>setState(()=>this.description=descreption),
             onChangedTitle: (title)=>setState(()=>this.title=title),
-            onSavedTodo: (){},)
-      ],
-    ),
+            onSavedTodo: addTodo,)
+        ],
+      ),
+    )
   );
+  void addTodo(){
+    final isValid=_formKey.currentState!.validate();
+    if(isValid==false){
+      return;
+    }else{
+      final todo=Todo(
+        id: DateTime.now().toString(),
+        title: title,
+        description: description,
+        createdTime:  DateTime.now(),
+      );
+      final provider = Provider.of<TodosProvider>(context,listen: false);
+      provider.addTodo(todo);
+      Navigator.of(context).pop();
+    }
+
+  }
 }
