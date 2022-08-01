@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/main.dart';
+import 'package:todo/ui/widgits/CompletedListwidget.dart';
 
 import 'widgits/AddToDoDialog.dart';
 import 'widgits/TodoListWidgit.dart';
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final tabs=[
       TodoListWidgit(),
-      Container(),
+      CompletedListwidget(),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -62,3 +63,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
